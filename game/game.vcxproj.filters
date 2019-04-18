@@ -49,6 +49,9 @@
     <ClInclude Include="BombGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WindowSize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="FruitMissile.png">

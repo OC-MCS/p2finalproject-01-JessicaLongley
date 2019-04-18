@@ -6,6 +6,7 @@ using namespace std;
 #include "Alien.h";
 #include "Missile.h"
 #include "MissileGroup.h"
+#include "Bomb.h"
 using namespace sf;
 
 class AlienArmy
@@ -16,6 +17,7 @@ class AlienArmy
     //list of enemies
     list<Alien> alienGroup; //this will hold the group of 10 aliens
     Vector2f pos; //for setting the position of the aliens as they are created
+
     
     //move down the screen
     //detect hit
@@ -61,7 +63,7 @@ public:
         }
     }
     //check if alien is hit by missile
-    void detectHitAliens(list<Missile> &multipleMissiles)
+    void detectHitAliens(list<Missile> &multipleMissiles, int &destroyedAliens)
     {
         bool isHit = false; //to check each alien's hit status regarding missiles
         list<Alien>::iterator alienIter;
@@ -75,15 +77,11 @@ public:
                 isHit = alienIter->isAlienHit(missileIter->getGlobalBounds());
                 if (isHit)
                 {
-                    //remove alien
-                    //alienIter = alienGroup.erase(alienIter);
-
                     //remove missile
                     missileIter = multipleMissiles.erase(missileIter);
                 }
                 else
                 {
-                    //alienIter++;
                     missileIter++;
                 }
             }
@@ -91,12 +89,36 @@ public:
             {
                 //remove alien
                 alienIter = alienGroup.erase(alienIter);
+                destroyedAliens += 1;
             }
             else
             {
                 alienIter++;
-                //missileIter++;
             }
         }
+    }
+    Vector2f getRandomAlienPos(RenderWindow &window)
+    {
+        Vector2f returnValue;
+        bool found = false;//for sorting through list of aliens to find the random alien
+        int count = 1;
+        int randAlien = rand() % 10 + 1; //10 FOR NUMBER OF ALIENS
+        list<Alien>::iterator Iter;
+        for (Iter = alienGroup.begin(); Iter != alienGroup.end() && !found; Iter++)
+        {
+            if (count == randAlien)
+            {
+                found = true;
+                returnValue = Iter->getPosition();
+                cout << "Function pos: " << endl;
+                //cout << "x: " << returnValue.x << endl;
+                //cout << "y: " << returnValue.y << endl;
+            }
+            else
+            {
+                count++;
+            }
+        }
+        return returnValue;
     }
 };

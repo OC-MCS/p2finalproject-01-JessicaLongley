@@ -51,5 +51,8 @@ public:
             enemySprite.move(0, DIST);
     //    }
     }
-
+    Vector2f getPosition()
+    {
+        return enemySprite.getPosition();
+    }
 };

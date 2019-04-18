@@ -34,4 +34,16 @@ public:
             iter->drawBomb(window);
         }
     }
+    void moveBombGroup()
+    {
+        list<Bomb>::iterator iter;
+        for (iter = multipleBombs.begin(); iter != multipleBombs.end(); iter++)
+        {
+            iter->moveBomb();
+        }
+    }
+    list<Bomb> &getBombList()
+    {
+        return multipleBombs;
+    }
 };

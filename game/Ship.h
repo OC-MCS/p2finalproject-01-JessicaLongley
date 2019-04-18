@@ -73,7 +73,7 @@ public:
         return isHit;
     }
 
-    void isShipHitByAnyBombs(list<Bomb> &multipleBombs)
+    void isShipHitByAnyBombs(list<Bomb> &multipleBombs, int &lives)
     {
         list<Bomb>::iterator Iter;
         bool isHit = false;
@@ -83,6 +83,7 @@ public:
             if (isHit)
             {
                 Iter = multipleBombs.erase(Iter);
+                lives -= 1;
             }
             else
             {

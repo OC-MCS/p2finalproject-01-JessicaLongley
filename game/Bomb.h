@@ -3,6 +3,7 @@
 using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
+#include "WindowSize.h"
 
 class Bomb
 {
@@ -22,13 +23,13 @@ public:
     }
     void moveBomb()
     {
-        const float DIST = -5.0f; //(will move 5 pixles every 60th of a second)
+        const float DIST = 5.0f; //(will move 5 pixles every 60th of a second)
         BombSprite.move(0, DIST); //move it down in the y direction
     }
     bool isBombOnScreen()
     {
         bool onScreen = false;
-        if (BombSprite.getPosition().y < 600 )  //missile is on screen //WHAT IS A WAY TO GET WINDOW_HEIGHT FROM MAIN WITHOUT PASSING?
+        if (BombSprite.getPosition().y < WINDOW_HEIGHT )  //missile is on screen //WHAT IS A WAY TO GET WINDOW_HEIGHT FROM MAIN WITHOUT PASSING?
         {
             onScreen = true;
         }
