@@ -17,6 +17,11 @@ public:
         enemySprite.setPosition(pos.x, pos.y); //set the Alien's position to the position handed to the constructor
     }
 
+    void resetYPos()
+    {
+        Vector2f temp = enemySprite.getPosition();
+        enemySprite.setPosition(temp.x, 0);
+    }
     //draw one alien
     void drawAlien(RenderWindow &window)
     {
@@ -44,7 +49,7 @@ public:
     //move alien down the screen
     void moveAlien()
     {
-        const float DIST = 0.2f; //(will move 0.2 pixles every 60th of a second)
+        const float DIST = 0.52f; //(will move 0.2 pixles every 60th of a second)
         //Vector2f enemyPos = enemySprite.getPosition();
         //while (enemyPos.y < 600) //HARDCODING IS BAD
         //{
@@ -54,5 +59,15 @@ public:
     Vector2f getPosition()
     {
         return enemySprite.getPosition();
+    }
+    //checks if alien has reached the level that the ship is on
+    bool hasAlienReachedShip()
+    {
+        bool hasReached = false;
+        if (getPosition().y > ((WINDOW_HEIGHT / 4) * 3)-48) //three fourths down the screen is where the ship is located - 48 the enemy's face
+        {
+            hasReached = true;
+        }
+        return hasReached;
     }
 };

@@ -160,12 +160,13 @@
     <ClInclude Include="MissileGroup.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="UI.h" />
-    <ClInclude Include="WindowSize.h" />
+    <ClInclude Include="GlobalConstants.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Enemy.png" />
     <Image Include="FruitMissile.png" />
     <Image Include="missile.png" />
+    <Image Include="NewAlien.png" />
     <Image Include="ship.png" />
     <Image Include="stars.jpg" />
   </ItemGroup>

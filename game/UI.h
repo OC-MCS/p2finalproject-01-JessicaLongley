@@ -8,32 +8,39 @@ class UI
 {
     RectangleShape startBtn; //will be the start button
     Font font; //will be the font for all printed words
-    //Text title;
     Texture starsTexture;
     Sprite background;
-    //Text title();
-
-
 
 public:
-    //load everything that will be used for the gmame
+    //load everything that will be used for the game
+    //and display the first screen
     UI(RenderWindow & window)
     {
         if (!starsTexture.loadFromFile("stars.jpg"))
             die("Unable to load stars texture!");
+        if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) //load font
+            die("couldn't load font");
 
         background.setTexture(starsTexture);
         background.setScale(1.5, 1.5);	// The texture file is 640x480, so scale it up a little to cover 800x600 window
 
-        //draw start button
-        if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) //load font
-            die("couldn't load font");
+        //start button
+        startBtn.setFillColor(Color::Green);
+        startBtn.setPosition(350, 275);
+        Vector2f buttonSize{ 110,60 };
+        startBtn.setSize(buttonSize);
+    }
+    void drawStartScreen(RenderWindow & window)
+    {
+        Text game("aliens!", font, 50);
+        game.setPosition(330, 50);
         Text title("Start", font, 50); //tell font what to print
-        //title("Start", font, 25);
         //title.setColor(Color::Cyan);
         title.setPosition(350, 275); //tell font where to print
-        window.draw(title); //draw the font
 
+        window.draw(game);
+        window.draw(startBtn);
+        window.draw(title); //draw the font
     }
 
     void drawGameScreen(RenderWindow & window, int lives, int aliensDestroyed)
@@ -47,15 +54,26 @@ public:
         aliensCounter.setPosition(3, 2);
         window.draw(aliensCounter);
     }
-    //bool detectStart(Vector2f mouse)
-    //{
-    //    bool isPressed = false;
-    //    if (title.getGlobalBounds().contains(mouse))
-    //    {
-    //        isPressed = true;
-    //    }
-    //    return isPressed;
-    //}
+    bool detectStart(Vector2f mouse)
+    {
+        bool isPressed = false;
+        if (startBtn.getGlobalBounds().contains(mouse))
+        {
+            isPressed = true;
+        }
+        return isPressed;
+    }
+
+    
+    void drawWinnerScreen(RenderWindow & window, string thisGuy) //not yet tested
+    {
+        Text winner("Winner: ", font, 50);
+        winner.setPosition(330, 50);
+        Text specifically(thisGuy, font, 50);
+        specifically.setPosition(330, 100);
+    }
+
+
 
 //a utility function to call any time we need to bail out
 //parameters: error msg as string

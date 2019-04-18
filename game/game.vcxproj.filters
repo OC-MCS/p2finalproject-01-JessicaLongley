@@ -49,7 +49,7 @@
     <ClInclude Include="BombGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowSize.h">
+    <ClInclude Include="GlobalConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -67,6 +67,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="stars.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="NewAlien.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

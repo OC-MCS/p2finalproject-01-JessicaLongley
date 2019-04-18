@@ -3,7 +3,7 @@
 using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
-#include "WindowSize.h"
+#include "GlobalConstants.h"
 
 class Bomb
 {

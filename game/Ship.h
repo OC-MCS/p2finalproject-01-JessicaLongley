@@ -32,6 +32,13 @@ public:
         float shipY = (window.getSize().y / 4.0f) * 3; //places alien 3/4ths down the screen
         shipSprite.setPosition(shipX, shipY);
     }
+    void resetShipPos(RenderWindow &window)
+    {
+        //initial position of the ship will be approx middle of screen
+        float shipX = window.getSize().x / 2.0f;
+        float shipY = (window.getSize().y / 4.0f) * 3; //places alien 3/4ths down the screen
+        shipSprite.setPosition(shipX, shipY);
+    }
 
     //handle ship moving left and right
     void moveShip(RenderWindow &window, const int WINDOW_WIDTH)
@@ -73,7 +80,7 @@ public:
         return isHit;
     }
 
-    void isShipHitByAnyBombs(list<Bomb> &multipleBombs, int &lives)
+    bool isShipHitByAnyBombs(list<Bomb> &multipleBombs, int &lives)
     {
         list<Bomb>::iterator Iter;
         bool isHit = false;
@@ -90,5 +97,7 @@ public:
                 Iter++;
             }
         }
+        return isHit;
     }
+   
 };
