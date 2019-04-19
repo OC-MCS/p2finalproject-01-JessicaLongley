@@ -1,3 +1,9 @@
+//================================================
+//Jessica Longley
+//April 19, 2019
+//Programming II Final Assignment
+//Description: aliens!
+//================================================
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -6,7 +12,7 @@ using namespace sf;
 
 class UI
 {
-    RectangleShape startBtn, playAgainBtn, blackScreen; //will be the start button
+    RectangleShape startBtn, playAgainBtn, blackScreen; //will be the buttons and boxes
     Font font; //will be the font for all printed words
     Texture starsTexture; 
     Sprite background; 
