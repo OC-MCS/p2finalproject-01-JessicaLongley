@@ -6,7 +6,7 @@ using namespace sf;
 
 class UI
 {
-    RectangleShape startBtn; //will be the start button
+    RectangleShape startBtn, playAgainBtn; //will be the start button
     Font font; //will be the font for all printed words
     Texture starsTexture;
     Sprite background;
@@ -27,8 +27,14 @@ public:
         //start button
         startBtn.setFillColor(Color::Green);
         startBtn.setPosition(350, 275);
-        Vector2f buttonSize{ 110,60 };
-        startBtn.setSize(buttonSize);
+        Vector2f buttonSize1{ 110,60 };
+        startBtn.setSize(buttonSize1);
+
+        //play again button
+        playAgainBtn.setFillColor(Color::Green);
+        playAgainBtn.setPosition(300, 270);
+        Vector2f buttonSize2{ 270, 60 };
+        playAgainBtn.setSize(buttonSize2);
     }
     void drawStartScreen(RenderWindow & window)
     {
@@ -71,9 +77,17 @@ public:
         winner.setPosition(330, 50);
         Text specifically(thisGuy, font, 50);
         specifically.setPosition(330, 100);
+
+
+        Text title("Play Again", font, 50); //tell font what to print
+        title.setPosition(315, 265); //tell font where to print
+
+        window.draw(winner);
+        window.draw(specifically);
+        window.draw(playAgainBtn);
+        window.draw(title);
+
     }
-
-
 
 //a utility function to call any time we need to bail out
 //parameters: error msg as string

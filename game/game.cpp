@@ -34,6 +34,9 @@ GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum &current
 
 int main()
 {
+    Font font;
+    if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) //load font
+        cout << "couldn't load font";
     //const int WINDOW_WIDTH = 800; //dont need these now that WindowSize.h exists
     //const int WINDOW_HEIGHT = 600;
 
@@ -90,10 +93,20 @@ int main()
 		// will appear on top of background
         if (currentState == WELCOME)
         {
+            //cout << "in welcome screen " << endl;
             userInterface.drawStartScreen(window);
         }
         else if (currentState == LEVEL_ONE || currentState == LEVEL_TWO)
         {
+            //if (currentState == LEVEL_ONE)
+            //{
+            //    cout << "in level one" << endl;
+            //}
+            //else if (currentState == LEVEL_TWO)
+            //{
+            //    cout << "in level two" << endl;
+            //}
+
                 userInterface.drawGameScreen(window, lives, destroyedAliens);//draw game labels
 
                 if (humanShip.isShipHitByAnyBombs(manyBombs.getBombList(), lives)) //if the ship is hit by any bombs
@@ -122,26 +135,33 @@ int main()
                 if (randNum == 3)
                 {
                     Vector2f tempPos = alienGroup.getRandomAlienPos(window, destroyedAliens);
-                    //cout << "Game pos: " << endl;
-                    //cout << tempPos.x << endl;
-                    //cout << tempPos.y << endl;
                     manyBombs.newBomb(tempPos);
                 }
                 manyBombs.moveBombGroup();
                 manyBombs.drawBombGroup(window);
 
                 currentState = resetState(lives, destroyedAliens, currentState, alienGroup);
+        }
+        else if (currentState == ALIEN_WON)
+        {
+            cout << "in alien won loop " << endl;
+            userInterface.drawWinnerScreen(window, "Alien");
 
+
+            alienGroup.clearAliens();//clear out list
+            destroyedAliens = 0;
+            lives = 5;
 
         }
-        //else if (currentState == ALIEN_WON)
-        //{
+        else if (currentState == HUMAN_WON)
+        {
+            cout << "in human won loop " << endl;
+            userInterface.drawWinnerScreen(window, "Human");
 
-        //}
-        //else if (currentState == HUMAN_WON)
-        //{
-
-        //}
+            alienGroup.clearAliens();//clear out list
+            destroyedAliens = 0;
+            lives = 5;
+        }
 
 		window.display();
    	}
@@ -154,7 +174,7 @@ int main()
 //reset current state of the enums if needed
 GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum &currentState, AlienArmy &alienGroup)
 {
-    if (lives < 1)
+    if (lives == 0)
     {
         currentState = ALIEN_WON;
     }

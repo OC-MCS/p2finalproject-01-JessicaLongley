@@ -92,7 +92,7 @@ public:
         for (iter = alienGroup.begin(); iter != alienGroup.end(); iter++)
         {
             iter->moveAlien(); //what is the syntax for calling functions from the alien class
-            cout << "moving" << endl;
+            //cout << "moving" << endl; //test code
         }
     }
     //check if alien is hit by missile
