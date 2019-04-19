@@ -189,7 +189,7 @@ GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentS
     {
         if (currentState == LEVEL_TWO)
         {
-            currentState == HUMAN_WON; //this line must not be working
+            currentState = HUMAN_WON; //this line must not be working
         }
         else
         {

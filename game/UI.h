@@ -106,6 +106,7 @@ public:
         Text title("Play Again", font, 50); //tell font what to print
         title.setPosition(315, 265); //tell font where to print
 
+        //window.draw(blackScreen);
         window.draw(background); //redraw the stars over the ugly
         window.draw(winner);
         window.draw(specifically);
