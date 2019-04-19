@@ -7,16 +7,20 @@ using namespace sf;
 
 class Bomb
 {
-    Sprite BombSprite;
+    Sprite BombSprite; //this is the sprite that bombTexture will be assigned to
 
 public:
+    //constructor
     //set texture to bomb sprite
+    //Parameters: Vector2f position of bomb, Texture passed by reference
     Bomb(Vector2f pos, Texture &BombTexture)
     {
         //set texture to sprite
         BombSprite.setTexture(BombTexture);
         BombSprite.setPosition(pos);
     }
+    //draws one bomb
+    //Parameters
     void drawBomb(RenderWindow &window)
     {
         window.draw(BombSprite);

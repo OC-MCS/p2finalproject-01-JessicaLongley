@@ -7,7 +7,6 @@ using namespace sf;
 class Missile
 {
     Sprite missileSprite;
-    //bool isMissileInFlight;
 public:
     //constructor
     Missile(Vector2f pos, Texture &missileTexture)
@@ -16,27 +15,35 @@ public:
         missileSprite.setTexture(missileTexture);
         missileSprite.setPosition(pos);
     }
-    Sprite getSprite() //get sprite for the draw missile group function in MissileGroup
-    {
-        return missileSprite;
-    }
+
+    //draw one missile
+    //Parameters: RenderWindow&
+    //Returns: void
     void drawMissile(RenderWindow &window)
     {
         window.draw(missileSprite);
     }
-    void setPosition(float x, float y)
-    {
-        missileSprite.setPosition(x, y);
-    }
+
+    //move one missile up screen
+    //Parameters: none
+    //Returns: void
     void moveMissile()
     {
         const float DIST = 5.0f; //(will move 5 pixles every 60th of a second)
         missileSprite.move(0, -DIST); //move it up in the y direction
     }
-    FloatRect getGlobalBounds()//for checking if missile has hit an alien
+
+    //get GlobalBounds of one missile for checking for hits later
+    //Parameters: none
+    //Returns: FloatRect (missile bounds)
+    FloatRect getGlobalBounds()
     {
         return missileSprite.getGlobalBounds();
     }
+
+    //check if missile is on screen
+    //Parameters: none
+    //Returns: bool (is missile on screen)
     bool isMissileOnScreen()
     {
         bool onScreen = false;
@@ -46,8 +53,5 @@ public:
         }
         return onScreen;
     }
-    Vector2f getPosition()
-    {
-        return missileSprite.getPosition();
-    }
+
 };

@@ -29,28 +29,23 @@ using namespace sf;
 // x is horizontal, y is vertical. 
 // 0,0 is in the UPPER LEFT of the screen, y increases DOWN the screen
 
-GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum &currentState, AlienArmy &alienGroup);
+GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup);
 
 
 int main()
 {
-    Font font;
-    if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) //load font
-        cout << "couldn't load font";
-    //const int WINDOW_WIDTH = 800; //dont need these now that WindowSize.h exists
-    //const int WINDOW_HEIGHT = 600;
-
     srand(time(NULL)); //for random numbers later in loop
     int randNum;
 
     int lives = 5; //lives of human
     int destroyedAliens = 0; //number of aliens destroyed
 
-    GameStateEnum currentState = WELCOME; //options include: WELCOME, LEVEL_ONE, LEVEL_TWO, ALIEN_WON, HUMAN_WON
+    GameStateEnum currentState = WELCOME; //this is from the "GlobalConstants.h", options include: WELCOME, LEVEL_ONE, LEVEL_TWO, ALIEN_WON, HUMAN_WON
 
- 	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "aliens!");
+ 	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "aliens!"); //where I get my wonderful title from
 	window.setFramerateLimit(60); //Limit the framerate to 60 frames per second
 
+    //declare all instances of classes
     UI userInterface(window);
     Ship humanShip(window);
     AlienArmy alienGroup;
@@ -66,15 +61,15 @@ int main()
    				window.close();
 			else if (event.type == Event::KeyPressed)
 			{
-				if (event.key.code == Keyboard::Space)
+				if (event.key.code == Keyboard::Space) //handle space bar
 				{
-                    manyMissiles.newMissile(humanShip.getPosition()); //handle space bar
+                    manyMissiles.newMissile(humanShip.getPosition()); //add a new missile where the ship is located
 				}
 			}
-            else if (event.type == Event::MouseButtonReleased)
+            else if (event.type == Event::MouseButtonReleased) //handle mouse button pressed
             {
                 Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-                if (userInterface.detectStart(mousePos))
+                if (userInterface.detectStart(mousePos)) //if they pressed one of the buttons to start the game
                 {
                     currentState = LEVEL_ONE;
 
@@ -84,28 +79,26 @@ int main()
 		}
 
 		//===========================================================
-		// Everything from here to the end of the loop is where you put your
+		// Everything from here to the end of the loop is where the
 		// code to produce ONE frame of the animation. The next iteration of the loop will
 		// render the next frame, and so on. All this happens ~ 60 times/second.
 		//===========================================================
 
-		// draw background first, so everything that's drawn later 
-		// will appear on top of background
-        if (currentState == WELCOME)
+        if (currentState == WELCOME) //if the enum state is welcome
         {
-            //cout << "in welcome screen " << endl;
-            userInterface.drawStartScreen(window);
+            cout << "in welcome screen " << endl; ///TESTING CODE
+            userInterface.drawStartScreen(window); //draw the screen that belongs to welcome
         }
-        else if (currentState == LEVEL_ONE || currentState == LEVEL_TWO)
+        else if (currentState == LEVEL_ONE || currentState == LEVEL_TWO) //if the enum state is level one or two
         {
-            //if (currentState == LEVEL_ONE)
-            //{
-            //    cout << "in level one" << endl;
-            //}
-            //else if (currentState == LEVEL_TWO)
-            //{
-            //    cout << "in level two" << endl;
-            //}
+            if (currentState == LEVEL_ONE) ///TESTING CODE
+            {
+                cout << "in level one " << endl;
+            }
+            else if (currentState == LEVEL_TWO) ///TESTING CODE
+            {
+                cout << "in level two " << endl;
+            }
 
                 userInterface.drawGameScreen(window, lives, destroyedAliens);//draw game labels
 
@@ -114,56 +107,70 @@ int main()
                     alienGroup.resetAliensPos(); //bring aliens to top
                     humanShip.resetShipPos(window); //bring ship to center
                 }
-                humanShip.moveShip(window, WINDOW_WIDTH); //ship movement
-                humanShip.drawShip(window); 
-
                 if (alienGroup.haveAliensReachedShip(lives)) //automatically resets the ship if reached by aliens
                 {
                     humanShip.resetShipPos(window);
                 }
+                humanShip.moveShip(window); //ship movement
 
                 alienGroup.detectHitAliens(manyMissiles.getMissileList(), destroyedAliens); //see who got hit
-
                 alienGroup.moveAlienArmy(); //move aliens down
-                alienGroup.drawAlienArmy(window);
 
                 manyMissiles.moveMissileGroup(); //move missiles up
-                manyMissiles.drawMissileGroup(window);
 
                 //add code here that makes the bombs faster for level 2
-                randNum = rand() % 60 - 1; //random new bombs
+                if (currentState == LEVEL_ONE)
+                {
+                    randNum = rand() % 60 - 1; //random new bombs (kind of slow)
+
+                }
+                else if (currentState == LEVEL_TWO)
+                {
+                    randNum = rand() % 30 - 1; //random new bombs (kind of fast)
+                }
                 if (randNum == 3)
                 {
-                    Vector2f tempPos = alienGroup.getRandomAlienPos(window, destroyedAliens);
-                    manyBombs.newBomb(tempPos);
+                    if (!alienGroup.isListEmpty())//make sure that the list of aliens has aliens in it before you make a bomb
+                    {
+                        Vector2f tempPos = alienGroup.getRandomAlienPos(window, destroyedAliens);
+                        manyBombs.newBomb(tempPos);
+                    }
+
                 }
-                manyBombs.moveBombGroup();
+                manyBombs.moveBombGroup(); //move bombs down
+
+                //make everything appear
+                humanShip.drawShip(window); 
+                alienGroup.drawAlienArmy(window);
+                manyMissiles.drawMissileGroup(window);
                 manyBombs.drawBombGroup(window);
 
+                //chang the state of the game (if applicable)
                 currentState = resetState(lives, destroyedAliens, currentState, alienGroup);
         }
-        else if (currentState == ALIEN_WON)
+        else if (currentState == ALIEN_WON) //if the aliens have taken all of the human's lives
         {
-            cout << "in alien won loop " << endl;
-            userInterface.drawWinnerScreen(window, "Alien");
-
+            cout << "in alien won loop " << endl; ///TESTING CODE
+            userInterface.drawWinnerScreen(window, "Alien"); //draw winner screen, saying the alien won
 
             alienGroup.clearAliens();//clear out list
-            destroyedAliens = 0;
+            //reset the scores
+            destroyedAliens = 0; 
             lives = 5;
 
         }
-        else if (currentState == HUMAN_WON)
+        else if (currentState == HUMAN_WON) //if the human has taken all of the aliens' lives
         {
-            cout << "in human won loop " << endl;
-            userInterface.drawWinnerScreen(window, "Human");
+            cout << "in human won loop " << endl; ///TESTING CODE
+            userInterface.drawWinnerScreen(window, "Human"); //draw winner screen, saying the human won
 
             alienGroup.clearAliens();//clear out list
+            //reset the scores
             destroyedAliens = 0;
             lives = 5;
         }
 
-		window.display();
+		window.display(); //display everything that was drawn
    	}
 
 	return 0;
@@ -172,7 +179,7 @@ int main()
 
 //look for winners
 //reset current state of the enums if needed
-GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum &currentState, AlienArmy &alienGroup)
+GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup)
 {
     if (lives == 0)
     {
@@ -182,7 +189,7 @@ GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum &current
     {
         if (currentState == LEVEL_TWO)
         {
-            currentState == HUMAN_WON;
+            currentState == HUMAN_WON; //this line must not be working
         }
         else
         {

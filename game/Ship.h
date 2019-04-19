@@ -5,15 +5,17 @@ using namespace std;
 using namespace sf;
 #include <list>
 #include "Bomb.h"
+#include "GlobalConstants.h"
 
 class Ship
 {
-    Texture shipTexture;
+    Texture shipTexture; 
     Sprite shipSprite;
     Vector2u shipSize; //this is a vector2u and not a Vector2f because the shipTexture.getSize() returns a Vector2u
 
 public:
-    //constructor
+    //Constructor: load texture, set to sprite, initializie position of ship
+    //Parameters: RenderWindow&
     Ship(RenderWindow &window)
     {
         //load ship texture
@@ -32,6 +34,10 @@ public:
         float shipY = (window.getSize().y / 4.0f) * 3; //places alien 3/4ths down the screen
         shipSprite.setPosition(shipX, shipY);
     }
+
+    //reset the ship's position to the middle of the screen
+    //Parameters: RenderWindow&
+    //Returns: void
     void resetShipPos(RenderWindow &window)
     {
         //initial position of the ship will be approx middle of screen
@@ -41,7 +47,9 @@ public:
     }
 
     //handle ship moving left and right
-    void moveShip(RenderWindow &window, const int WINDOW_WIDTH)
+    //Parameters: RenderWindow&
+    //Returns: void
+    void moveShip(RenderWindow &window)
     {
         const float DISTANCE = 5.0;
 
@@ -59,16 +67,25 @@ public:
     }
 
     //handle drawing the ship
+    //Parameters: RenderWindow&
+    //Returns: void
     void drawShip(RenderWindow &window)
     {
         window.draw(shipSprite);
     }
+    
+    //get the ship's position
+    //Parameters: none
+    //Returns: Vector2f position of ship
     Vector2f getPosition()
     {
         return shipSprite.getPosition();
 
     }
 
+    //compares one bomb's bounds to the ship's bounds
+    //Parmeters: FloadRect (the bomb's bounds)
+    //Returns: bool (is the ship hit)
     bool isShipHitByOneBomb(FloatRect bombBounds)
     {
         bool isHit = false;
@@ -80,9 +97,12 @@ public:
         return isHit;
     }
 
+//compares many bombs' bounds to the ship's bounds, decrements lives if necessisary
+//Parmeters: list<Bomb> &multipleBombs, int lives
+//Returns: bool (is the ship hit)
     bool isShipHitByAnyBombs(list<Bomb> &multipleBombs, int &lives)
     {
-        list<Bomb>::iterator Iter;
+        list<Bomb>::iterator Iter; //iterator walks through list of bombs
         bool isHit = false;
         for (Iter = multipleBombs.begin(); Iter != multipleBombs.end() && !isHit;)
         {
@@ -94,7 +114,7 @@ public:
             }
             else
             {
-                Iter++;
+                Iter++; //we incriment this here because the erase function also incriments
             }
         }
         return isHit;

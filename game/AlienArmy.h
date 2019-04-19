@@ -12,18 +12,15 @@ using namespace sf;
 
 class AlienArmy
 {
-    //define texture object 
-
+    //define texture objects
     Texture enemyTextureL1;
     Texture enemyTextureL2;
-    //list of enemies
     list<Alien> alienGroup; //this will hold the group of 10 aliens
     Vector2f pos; //for setting the position of the aliens as they are created
 
-    
-    //move down the screen
-    //detect hit
 public:
+    //Constructor: loads enemy textures
+    //Parameters: none
     AlienArmy()
     {
         //load alien texture
@@ -39,18 +36,11 @@ public:
             cout << "Unable to load enemy texture!" << endl;
             exit(EXIT_FAILURE);
         }
-
-        ////first alien's posiion
-        //pos.x = 20;
-        //pos.y = 10;
-        ////spin through list to create 10 new aliens
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    Alien temp(pos, enemyTextureL1);
-        //    alienGroup.push_back(temp);
-        //    pos.x += 80;
-        //}
     }
+
+    //fill the alien list with aliens
+    //Parameters: GameStateEnum (the current level)
+    //Returns: void
     void populateAlienList(GameStateEnum currentState)
     {
         //first alien's posiion
@@ -72,10 +62,18 @@ public:
             pos.x += 80;
         }
     }
+
+    //clear out all aliens to start fresh
+    //Parameters: none
+    //Returns: void
     void clearAliens()
     {
         alienGroup.clear();
     }
+
+    //draw the list of aliens
+    //Parameters: RenderWindow&
+    //Returns: void
     void drawAlienArmy(RenderWindow &window)
     {
         list<Alien>::iterator iter;
@@ -85,6 +83,10 @@ public:
             iter->drawAlien(window); //what is the syntax for drawing one of the aliens in the list
         }
     }
+
+    //move the list of aliens
+    //Parameters: none
+    //Returns: void
     void moveAlienArmy()
     {
         //move all aliens down the screen
@@ -95,13 +97,14 @@ public:
             //cout << "moving" << endl; //test code
         }
     }
+
     //check if alien is hit by missile
+    //Parameters: list<Missile> &(list of missiles), int &destroyedAliens
     void detectHitAliens(list<Missile> &multipleMissiles, int &destroyedAliens)
     {
         bool isHit = false; //to check each alien's hit status regarding missiles
-        list<Alien>::iterator alienIter;
-        list<Missile>::iterator missileIter;
-
+        list<Alien>::iterator alienIter; //for stepping through the list of aliens
+        list<Missile>::iterator missileIter; //for stepping through the list of missiles
         for (alienIter = alienGroup.begin(); alienIter != alienGroup.end();)
         {
             isHit = false;
@@ -110,38 +113,55 @@ public:
                 isHit = alienIter->isAlienHit(missileIter->getGlobalBounds());
                 if (isHit)
                 {
-                    //remove missile
-                    missileIter = multipleMissiles.erase(missileIter);
+                    missileIter = multipleMissiles.erase(missileIter); //remove missile and point to next thing in list
+
                 }
                 else
                 {
-                    missileIter++;
+                    missileIter++; //move to the next thing in the list
                 }
             }
             if (isHit)
             {
-                //remove alien
-                alienIter = alienGroup.erase(alienIter);
-                destroyedAliens += 1;
+                alienIter = alienGroup.erase(alienIter); //remove alien and point to the next thing in the list
+                destroyedAliens += 1; //one less alien
             }
             else
             {
-                alienIter++;
+                alienIter++; //move to the next thing in the list
             }
         }
     }
+
+    //determind if the list is empty
+    //Parameters: none
+    //Returns: bool (is the list empty)
+    bool isListEmpty()
+    {
+        bool isEmpty = false;
+        if (alienGroup.size() < 1)
+        {
+            isEmpty = true;
+        }
+        return isEmpty;
+    }
+
+    //get a random alien's position
+    //Parameters: RenderWindow &, int destroyedAlines
+    //Returns: Vector2f (the random postion)
     Vector2f getRandomAlienPos(RenderWindow &window, int destroyedAliens)
     {
-        Vector2f returnValue;
-        int randAlien = rand() % alienGroup.size(); //10 FOR NUMBER OF ALIENS
-        list<Alien>::iterator Iter;
+        Vector2f returnValue; //will hold the position being returned
+        int randAlien = rand() % alienGroup.size(); //just consider the aliens that remain
+        list<Alien>::iterator Iter; //iterate through the list and find the random one
         Iter = alienGroup.begin();
         advance(Iter, randAlien);
-        //cout << "Function pos: " << endl;
-        //cout << "x: " << returnValue.x << endl;
-        //cout << "y: " << returnValue.y << endl;
         return Iter->getPosition();
     }
+
+    //reset the list of aliens to the top of the screen
+    //Parameters: none
+    //Returns: void
     void resetAliensPos()
     {
         list<Alien>::iterator iter;
@@ -150,16 +170,20 @@ public:
             iter->resetYPos();
         }
     }
+
+    //check if the list of aliens have reached the ship
+    //Parameters: int &lives
+    //Return: bool (have they reached)
     bool haveAliensReachedShip(int &lives)
     {
         bool isReached = false;
         list<Alien>::iterator iter;
-        if (alienGroup.size() > 0)
+        if (alienGroup.size() > 0) //as long as there are actually aliens in the group
         {
             if (alienGroup.begin()->hasAlienReachedShip())
             {
-                lives -= 1;
-                resetAliensPos();
+                lives -= 1; //take away one life
+                resetAliensPos(); //put aliens at the top of the screen
             }
         }
 
