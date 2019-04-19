@@ -29,7 +29,7 @@ using namespace sf;
 // x is horizontal, y is vertical. 
 // 0,0 is in the UPPER LEFT of the screen, y increases DOWN the screen
 
-GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup);
+GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup, MissileGroup &manyMissiles, BombGroup &manyBombs);
 
 
 int main()
@@ -106,10 +106,14 @@ int main()
                 {
                     alienGroup.resetAliensPos(); //bring aliens to top
                     humanShip.resetShipPos(window); //bring ship to center
+                    manyMissiles.clearMissiles(); //clear all missiles on screen 
+                    manyBombs.clearBombs(); //clear all bombs on screen
                 }
                 if (alienGroup.haveAliensReachedShip(lives)) //automatically resets the ship if reached by aliens
                 {
                     humanShip.resetShipPos(window);
+                    manyMissiles.clearMissiles(); //clear all missiles on screen 
+                    manyBombs.clearBombs(); //clear all bombs on screen
                 }
                 humanShip.moveShip(window); //ship movement
 
@@ -146,7 +150,7 @@ int main()
                 manyBombs.drawBombGroup(window);
 
                 //chang the state of the game (if applicable)
-                currentState = resetState(lives, destroyedAliens, currentState, alienGroup);
+                currentState = resetState(lives, destroyedAliens, currentState, alienGroup, manyMissiles, manyBombs);
         }
         else if (currentState == ALIEN_WON) //if the aliens have taken all of the human's lives
         {
@@ -179,7 +183,7 @@ int main()
 
 //look for winners
 //reset current state of the enums if needed
-GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup)
+GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentState, AlienArmy &alienGroup, MissileGroup &manyMissiles, BombGroup &manyBombs)
 {
     if (lives == 0)
     {
@@ -196,6 +200,8 @@ GameStateEnum resetState(int lives, int &destroyedAliens, GameStateEnum currentS
             currentState = LEVEL_TWO;
             //make changes for transitioning from level one to level two
             alienGroup.clearAliens();//clear out list
+            manyMissiles.clearMissiles(); //clear all missiles on screen 
+            manyBombs.clearBombs(); //clear all bombs on screen
             alienGroup.populateAlienList(currentState);
             destroyedAliens = 0; //back to having hit no aliens
         }

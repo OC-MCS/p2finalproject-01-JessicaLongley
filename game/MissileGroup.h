@@ -63,4 +63,12 @@ public:
     {
         return multipleMissiles;
     }
+
+//clear out all missiles to start fresh
+//Parameters: none
+//Returns: void
+    void clearMissiles()
+    {
+        multipleMissiles.clear();
+    }
 };

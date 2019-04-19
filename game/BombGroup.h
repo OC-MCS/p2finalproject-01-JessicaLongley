@@ -61,4 +61,12 @@ public:
     {
         return multipleBombs;
     }
+
+//clear out all bombs to start fresh
+//Parameters: none
+//Returns: void
+    void clearBombs()
+    {
+        multipleBombs.clear();
+    }
 };
